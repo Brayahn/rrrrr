@@ -1,0 +1,21 @@
+[
+ {
+  "allow_guest": 0,
+  "api_method": null,
+  "cron_format": null,
+  "disabled": 1,
+  "docstatus": 0,
+  "doctype": "Server Script",
+  "doctype_event": "Before Insert",
+  "enable_rate_limit": 0,
+  "event_frequency": "Daily",
+  "modified": "2024-03-21 15:55:59.915789",
+  "module": "Education",
+  "name": "Fee notification",
+  "rate_limit_count": 5,
+  "rate_limit_seconds": 86400,
+  "reference_doctype": null,
+  "script": "import frappe\nfrom frappe.utils import nowdate, add_days\nfrom erpnext.setup.doctype.sms_settings.sms_settings import send_sms\n\ndef send_fee_reminder_sms():\n    # Define the number of days before due date to send reminders\n    days_before_due = [5, 4, 3, 2, 1, 0]\n\n    # Get fees due within the specified number of days\n    for days in days_before_due:\n        due_date = add_days(nowdate(), days)\n        fees = frappe.get_all(\"Fee\", filters={\"due_date\": due_date})\n\n        for fee in fees:\n            # Get student's phone number\n            student = frappe.get_doc(\"Student\", fee.student)\n            phone_number = student.get(\"phone\")\n\n            # Send SMS reminder\n            if phone_number:\n                message = f\"Hello {student.student_name}, your fee is due in {days} days.\"\n                send_sms([phone_number], message)\n\n# Run the function\nsend_fee_reminder_sms()\n",
+  "script_type": "Scheduler Event"
+ }
+]

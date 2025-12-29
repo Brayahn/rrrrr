@@ -1,0 +1,79 @@
+[
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Student Applicant",
+  "enabled": 1,
+  "modified": "2025-12-13 22:00:45.644695",
+  "module": "Education",
+  "name": "Student Applicant",
+  "script": "\r\n  frappe.ui.form.on('Program Enrollment', {\r\n      refresh: function(frm) {\r\n          if (frm.is_new() && frm.doc.student) {\r\n              frappe.db.get_value('Student', frm.doc.student, 'student_applicant')\r\n                  .then(r => {\r\n                      if (r.message && r.message.student_applicant) {\r\n                          frappe.db.get_value('Student Applicant', r.message.student_applicant,\r\n                              ['academic_year', 'academic_term'])\r\n                              .then(result => {\r\n                                  if (result.message) {\r\n                                      console.log('result.message',result.message)\r\n                                      if (result.message && result.message.academic_year) {\r\n                                          frm.set_value('academic_year', result.message.academic_year);\r\n                                      }\r\n                                      if (!result.message && result.message.academic_term) {\r\n                                          frm.set_value('academic_term', result.message.academic_term);\r\n                                      }\r\n                                  }\r\n                              });\r\n                      }\r\n                  });\r\n          }\r\n      }\r\n  });\r\n  \r\n  ",
+  "view": "Form"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Student Applicant",
+  "enabled": 1,
+  "modified": "2025-12-13 22:10:02.686605",
+  "module": "Education",
+  "name": "Student Aplicant Validation",
+  "script": "frappe.ui.form.on('Student Applicant', {\r\n      refresh: function(frm) {\r\n          if (!frm.is_new() && frm.doc.application_status === \"Approved\") {\r\n              frm.remove_custom_button('Enroll');\r\n\r\n              frm.add_custom_button(__('Enroll'), function() {\r\n                  frappe.db.get_value('Student', {'student_applicant': frm.doc.name}, 'name')\r\n                      .then(r => {\r\n                          if (r.message && r.message.name) {\r\n                              frappe.msgprint({\r\n                                  title: __('Already Enrolled'),\r\n                                  indicator: 'red',\r\n                                  message: __(`This student has already been enrolled as <b><a \r\n  href=\"/app/student/${r.message.name}\">${r.message.name}</a></b>.<br><br>\r\n                                      To re-enroll this applicant:<br>\r\n                                      1. Click the link above to open the Student record<br>\r\n                                      2. Delete the Student record<br>\r\n                                      3. Return here and click Enroll again`)\r\n                              });\r\n                          } else {\r\n                              frm.events.enroll(frm);\r\n                          }\r\n                      });\r\n              }).addClass('btn-primary');\r\n          }\r\n          \r\n                    // Hide standard action buttons (Approve, Reject, Enroll) since we're using workflow\r\n          frm.remove_custom_button('Approve', 'Actions');\r\n          frm.remove_custom_button('Reject', 'Actions');\r\n          frm.remove_custom_button('Enroll');\r\n\r\n          // Add custom Enroll button only when Approved\r\n          if (!frm.is_new() && frm.doc.application_status === \"Approved\") {\r\n              frm.add_custom_button(__('Enroll'), function() {\r\n                  frappe.db.get_value('Student', {'student_applicant': frm.doc.name}, 'name')\r\n                      .then(r => {\r\n                          if (r.message && r.message.name) {\r\n                              frappe.msgprint({\r\n                                  title: __('Already Enrolled'),\r\n                                  indicator: 'red',\r\n                                  message: __(`This student has already been enrolled as <b><a \r\n  href=\"/app/student/${r.message.name}\">${r.message.name}</a></b>.<br><br>\r\n                                      To re-enroll this applicant:<br>\r\n                                      1. Click the link above to open the Student record<br>\r\n                                      2. Delete the Student record<br>\r\n                                      3. Return here and click Enroll again`)\r\n                              });\r\n                          } else {\r\n                              frm.events.enroll(frm);\r\n                          }\r\n                      });\r\n              }).addClass('btn-primary');\r\n          }\r\n      },\r\n\r\n      enroll: function(frm) {\r\n          frappe.model.open_mapped_doc({\r\n              method: \"education.education.api.enroll_student\",\r\n              frm: frm\r\n          });\r\n      },\r\n\r\n      enroll: function(frm) {\r\n          frappe.model.open_mapped_doc({\r\n              method: \"education.education.api.enroll_student\",\r\n              frm: frm\r\n          });\r\n      }\r\n  });",
+  "view": "Form"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Program Enrollment",
+  "enabled": 1,
+  "modified": "2025-12-18 16:02:05.674656",
+  "module": "Education",
+  "name": "Auto-fill from Student Applicant",
+  "script": "frappe.ui.form.on('Program Enrollment', {\r\n      refresh: function(frm) {\r\n          if (frm.is_new() && frm.doc.student && frm.doc.program) {\r\n              frm.events.fetch_applicant_details(frm);\r\n          }\r\n      },\r\n\r\n      student: function(frm) {\r\n          if (frm.doc.student && frm.doc.program) {\r\n              frm.events.fetch_applicant_details(frm);\r\n          }\r\n      },\r\n\r\n      program: function(frm) {\r\n          console.log('program triggered');\r\n          frm.events.fetch_program_department(frm);\r\n      },\r\n\r\n      fetch_applicant_details: function(frm) {\r\n          frappe.db.get_value('Student', frm.doc.student, 'student_applicant')\r\n              .then(r => {\r\n                  if (r.message && r.message.student_applicant) {\r\n                      frappe.db.get_doc('Student Applicant', r.message.student_applicant)\r\n                          .then(applicant => {\r\n                              if (applicant) {\r\n                                  if (applicant.academic_year) {\r\n                                      frm.set_value('academic_year', applicant.academic_year);\r\n                                  }\r\n                                  if (applicant.academic_term) {\r\n                                      frm.set_value('academic_term', applicant.academic_term);\r\n                                  }\r\n                                  if (applicant.student_category) {\r\n                                      frm.set_value('student_category', applicant.student_category);\r\n                                  }\r\n                                  if (applicant.custom_branch) {\r\n                                      frm.set_value('custom_branch', applicant.custom_branch);\r\n                                  }\r\n                                  if (applicant.program) {\r\n                                      frm.set_value('program', applicant.program).then(() => {\r\n                                          frm.events.fetch_program_department(frm);\r\n                                      });\r\n                                  }\r\n                              }\r\n                          });\r\n                  }\r\n              });\r\n      },\r\n\r\n      fetch_program_department: function(frm) {\r\n          if (!frm.doc.program) return;\r\n\r\n          frappe.db.get_value('Program', frm.doc.program, 'department')\r\n              .then(r => {\r\n                  if (r.message && r.message.department) {\r\n                      console.log('department', r.message.department);\r\n                      frm.set_value('department', r.message.department);\r\n                  }\r\n              });\r\n      }\r\n  });",
+  "view": "Form"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Student Applicant",
+  "enabled": 0,
+  "modified": "2025-12-16 12:08:24.814626",
+  "module": "Education",
+  "name": "Student Applicant program list",
+  "script": "frappe.ui.form.on('Student Applicant', {\r\n    refresh: function(frm) {\r\n        frm.set_query('program', function() {\r\n            if (!frm.doc.custom_branch) {\r\n                frappe.msgprint(__('Please select a Branch first'));\r\n                return { filters: { name: '' } }; // no results\r\n            }\r\n\r\n            return {\r\n                query: function() {\r\n                    // Custom query to filter programs whose child table contains this branch\r\n                    return {\r\n                        filters: [\r\n                            ['custom_branch', 'like', `%${frm.doc.custom_branch}%`]\r\n                        ]\r\n                    };\r\n                }\r\n            };\r\n        });\r\n    },\r\n\r\n    branch: function(frm) {\r\n        // Clear program when branch changes\r\n        frm.set_value('program', '');\r\n    }\r\n});\r\n",
+  "view": "Form"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Program Enrollment",
+  "enabled": 0,
+  "modified": "2024-03-20 09:14:13.415813",
+  "module": "Education",
+  "name": "Auto fetch feestructure",
+  "script": "frappe.ui.form.on('Program Enrollment', {\n    refresh(frm) {\n        // Fetch fees structure when program is selected\n        frm.set_query('program', function() {\n            return {\n                filters: {\n                    // Your filter conditions here, if any\n                },\n                callback: function(doc, cdt, cdn) {\n                    var program = frappe.get_doc(cdt, cdn);\n                    if (program && program.fee_structure) {\n                        // If program has linked fee structure, fetch it\n                        frappe.call({\n                            method: 'education.education.doctype.fees_structure.fees_structure.get_fee_structure',\n                            args: {\n                                program: program.name // Pass program name or relevant information\n                            },\n                            callback: function(response) {\n                                if (response && response.message) {\n                                    // Set fetched fee structure to the table field\n                                    frm.doc.fees.forEach(function(fee) {\n                                        fee.fee_component = response.message; // Assuming the field in your table is named \"fee_component\"\n                                    });\n                                    frm.refresh_field('fees'); // Refresh the table field to reflect changes\n                                }\n                            }\n                        });\n                    }\n                }\n            };\n        });\n    }\n});\n",
+  "view": "Form"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Fees",
+  "enabled": 0,
+  "modified": "2024-05-23 13:27:01.339108",
+  "module": "Education",
+  "name": "double_invoicing_deterent",
+  "script": "frappe.ui.form.on(\"Fees\", {\n  before_save: function (frm) {\n    // Check if the program field value is set\n    if (frm.doc.program && frm.doc.academic_year) {\n      // Fetch all invoices of the current student for the specified program and academic year\n      frappe.call({\n        method: \"frappe.client.get_list\",\n        args: {\n          doctype: \"Fees\",\n          filters: {\n            student: frm.doc.student,\n            program: frm.doc.program,\n            outstanding_amount:[\"!=\", 0],\n            // academic_year: frm.doc.academic_year,\n            docstatus: 1, // Filter for submitted fees documents\n          },\n          fields: [\"name\"],\n        },\n        callback: function (response) {\n          const invoicesSent = response.message.length;\n\n          // Check if the count is already more than 1\n          if (invoicesSent > 1) {\n            frappe.msgprint(\n              __(\n                \"You already have existing invoice with balances for this student. Please clear the balance to create a new invoice.\"\n              )\n            );\n            frappe.validated = false;\n          }\n        },\n      });\n    }\n  },\n});\n",
+  "view": "Form"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Fees",
+  "enabled": 1,
+  "modified": "2024-05-09 02:57:16.287790",
+  "module": "Education",
+  "name": "prevent double invoicing with confirm",
+  "script": "frappe.ui.form.on(\"Fees\", {\n    before_save: async function (frm) {\n        // Check if the program field value is set\n        if (frm.doc.program && frm.doc.academic_year) {\n            let userConfirmed = false; // Flag to track user confirmation\n\n            try {\n                // Fetch all invoices of the current student for the specified program and academic year\n                const response = await new Promise((resolve, reject) => {\n                    frappe.call({\n                        method: \"frappe.client.get_list\",\n                        args: {\n                            doctype: \"Fees\",\n                            filters: {\n                                student: frm.doc.student,\n                                program: frm.doc.program,\n                                outstanding_amount:[\"!=\", 0],\n                                // academic_year: frm.doc.academic_year,\n                                docstatus: 1, // Filter for submitted fees documents\n                            },\n                            fields: [\"name\"],\n                        },\n                        callback: function (response) {\n                            resolve(response);\n                        },\n                    });\n                });\n\n                const invoicesSent = response.message.length;\n\n                // Check if the count is already more than 1\n                if (invoicesSent > 0 && !userConfirmed) {\n                    // Prompt user for confirmation only if user hasn't confirmed yet\n                    await new Promise((resolve, reject) => {\n                        frappe.confirm(\"Are you sure you want to proceed with invoicing the student again?\",\n                            () => {\n                                // action to perform if Yes is selected\n                                console.log(\"triggered\");\n                                userConfirmed = true;\n                                resolve();\n                            },\n                            () => {\n                                // action to perform if No is selected\n                                frappe.validated = false;\n                                reject();\n                            }\n                        );\n                    });\n                }\n\n                // if (!userConfirmed) {\n                //     // No existing invoices, proceed with saving only if user hasn't confirmed yet\n                //     frappe.validated = true;\n                //     frm.save(); // Save the form\n                // }\n            } catch (error) {\n                console.error(\"Error:\", error);\n            }\n\n            return false; // Return false to prevent default saving behavior until confirmation\n        }\n    },\n});\n",
+  "view": "Form"
+ }
+]

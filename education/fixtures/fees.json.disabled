@@ -1,0 +1,47 @@
+[
+ {
+  "academic_term": "2024-2025 (Term 1)",
+  "academic_year": "2024-2025",
+  "amended_from": null,
+  "company": "Bridge College",
+  "components": [
+   {
+    "amount": 20000.0,
+    "description": "couse fees",
+    "fees_category": "term 2",
+    "parent": "EDU-FEE-2025-00189",
+    "parentfield": "components",
+    "parenttype": "Fees"
+   }
+  ],
+  "cost_center": "Main - BCS",
+  "currency": "KES",
+  "docstatus": 1,
+  "doctype": "Fees",
+  "due_date": "2025-11-30",
+  "fee_schedule": null,
+  "fee_structure": "DIPLOMA IN BUSINESS MANAGEMENT - 2024-2025 (Term 1) - Regular",
+  "grand_total": 20000.0,
+  "grand_total_in_words": "KES Twenty Thousand only.",
+  "include_payment": 0,
+  "income_account": "Fees Recieved - BCS",
+  "letter_head": "Bridge College fees leterhead",
+  "modified": "2025-11-12 13:16:29.596546",
+  "name": "EDU-FEE-2025-00189",
+  "naming_series": "EDU-FEE-.YYYY.-",
+  "outstanding_amount": 12000.0,
+  "posting_date": "2025-11-11",
+  "posting_time": "15:45:15.517638",
+  "program": "DIPLOMA IN BUSINESS MANAGEMENT",
+  "program_enrollment": "EDU-DIPLOMA IN BUSINESS MANAGEMENT-2025-16785-1",
+  "receivable_account": "Debtors - BCS",
+  "select_print_heading": null,
+  "send_payment_request": 0,
+  "set_posting_time": 0,
+  "student": "EDU-STU-2025-14867",
+  "student_batch": null,
+  "student_category": null,
+  "student_email": "silvanussigei1996@gmail.com",
+  "student_name": "Sylvestus Sigei"
+ }
+]
