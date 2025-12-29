@@ -1,24 +1,33 @@
-## Education
+### Collage Custom
 
-The Education Domain of ERPNext comes with features to record student info and courses, track assessment, fees payments, curate quizes and programs. You can check out the following topics after this brief introduction to the education module.
-
+collage custom
 
 ### Installation
 
-Using bench, [install ERPNext](https://github.com/frappe/bench#installation) as mentioned here.
+You can install this app using the [bench](https://github.com/frappe/bench) CLI:
 
-Once ERPNext is installed, add education app to your bench by running
-```sh
-$ bench get-app education
+```bash
+cd $PATH_TO_YOUR_BENCH
+bench get-app $URL_OF_THIS_REPO --branch develop
+bench install-app education_custom
 ```
 
-After that, you can install education app on required site by running
+### Contributing
 
-```sh
-$ bench --site demo.com install-app education
+This app uses `pre-commit` for code formatting and linting. Please [install pre-commit](https://pre-commit.com/#installation) and enable it for this repository:
+
+```bash
+cd apps/education_custom
+pre-commit install
 ```
 
+Pre-commit is configured to use the following tools for checking and formatting your code:
+
+- ruff
+- eslint
+- prettier
+- pyupgrade
 
 ### License
 
-GNU GPL V3. See [license.txt](https://github.com/frappe/agriculture/blob/develop/license.txt) for more information.
+mit

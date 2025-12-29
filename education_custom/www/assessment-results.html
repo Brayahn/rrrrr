@@ -1,0 +1,300 @@
+{% extends "templates/web.html" %}
+{% block title %}Assessment Results{% endblock %}
+
+{% block page_content %}
+<div class="container py-4">
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2>My Assessment Results</h2>
+            <p class="text-muted">View your grades and performance summary</p>
+        </div>
+    </div>
+
+    <!-- Loading State -->
+    <div id="loading" class="text-center py-5">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <p class="mt-2 text-muted">Loading your assessment results...</p>
+    </div>
+
+    <!-- Error State -->
+    <div id="error-state" class="d-none">
+        <div class="alert alert-warning" role="alert">
+            <h5 class="alert-heading">No Results Found</h5>
+            <p id="error-message">No assessment results found for your account.</p>
+        </div>
+    </div>
+
+    <!-- Content Section -->
+    <div id="content-section" class="d-none">
+        <!-- Summary Cards -->
+        <div class="row mb-4">
+            <div class="col-md-3 mb-3">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body text-center">
+                        <div class="bg-primary bg-opacity-10 rounded-circle p-3 d-inline-block mb-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="text-primary" viewBox="0 0 16 16">
+                                <path d="M5 10.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5zm0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z"/>
+                                <path d="M3 0h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-1h1v1a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v1H1V2a2 2 0 0 1 2-2z"/>
+                                <path d="M1 5v-.5a.5.5 0 0 1 1 0V5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 3v-.5a.5.5 0 0 1 1 0V8h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 3v-.5a.5.5 0 0 1 1 0v.5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1z"/>
+                            </svg>
+                        </div>
+                        <h6 class="text-muted mb-1">Total Assessments</h6>
+                        <h3 class="mb-0" id="total-assessments">0</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body text-center">
+                        <div class="bg-success bg-opacity-10 rounded-circle p-3 d-inline-block mb-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="text-success" viewBox="0 0 16 16">
+                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                            </svg>
+                        </div>
+                        <h6 class="text-muted mb-1">Total Score</h6>
+                        <h3 class="mb-0 text-success" id="total-score">0</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body text-center">
+                        <div class="bg-info bg-opacity-10 rounded-circle p-3 d-inline-block mb-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="text-info" viewBox="0 0 16 16">
+                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                            </svg>
+                        </div>
+                        <h6 class="text-muted mb-1">Max Possible</h6>
+                        <h3 class="mb-0 text-info" id="max-score">0</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body text-center">
+                        <div class="bg-warning bg-opacity-10 rounded-circle p-3 d-inline-block mb-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="text-warning" viewBox="0 0 16 16">
+                                <path d="M2.5 15a.5.5 0 1 1 0-1h1v-1a4.5 4.5 0 0 1 2.557-4.06c.29-.139.443-.377.443-.59v-.7c0-.213-.154-.451-.443-.59A4.5 4.5 0 0 1 3.5 3V2h-1a.5.5 0 0 1 0-1h11a.5.5 0 0 1 0 1h-1v1a4.5 4.5 0 0 1-2.557 4.06c-.29.139-.443.377-.443.59v.7c0 .213.154.451.443.59A4.5 4.5 0 0 1 12.5 13v1h1a.5.5 0 0 1 0 1h-11z"/>
+                            </svg>
+                        </div>
+                        <h6 class="text-muted mb-1">Average</h6>
+                        <h3 class="mb-0" id="average-percentage">0%</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results by Course -->
+        <div id="results-by-course">
+            <!-- Course sections will be inserted here -->
+        </div>
+
+        <!-- All Results Table -->
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white border-bottom">
+                <h5 class="mb-0">All Results</h5>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Assessment</th>
+                                <th>Course</th>
+                                <th>Date</th>
+                                <th class="text-end">Score</th>
+                                <th class="text-end">Max</th>
+                                <th class="text-end">Percentage</th>
+                                <th class="text-center">Grade</th>
+                            </tr>
+                        </thead>
+                        <tbody id="results-table-body">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.card {
+    transition: transform 0.2s ease-in-out;
+}
+.card:hover {
+    transform: translateY(-2px);
+}
+.table th {
+    font-weight: 600;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.table td {
+    vertical-align: middle;
+}
+.badge {
+    font-weight: 500;
+}
+.progress {
+    height: 8px;
+}
+</style>
+
+<script>
+frappe.ready(function() {
+    loadAssessmentResults();
+});
+
+function loadAssessmentResults() {
+    frappe.call({
+        method: 'education_custom.api.assessments.get_student_assessment_results',
+        callback: function(r) {
+            $('#loading').addClass('d-none');
+
+            if (r.message && r.message.success) {
+                displayAssessmentResults(r.message);
+            } else {
+                $('#error-state').removeClass('d-none');
+                if (r.message && r.message.message) {
+                    $('#error-message').text(r.message.message);
+                }
+            }
+        },
+        error: function(err) {
+            $('#loading').addClass('d-none');
+            $('#error-state').removeClass('d-none');
+            $('#error-message').text('An error occurred while loading your assessment results. Please try again later.');
+        }
+    });
+}
+
+function displayAssessmentResults(data) {
+    const summary = data.summary || {};
+
+    // Update summary cards
+    $('#total-assessments').text(summary.total_assessments || 0);
+    $('#total-score').text(summary.total_score || 0);
+    $('#max-score').text(summary.total_max_score || 0);
+    $('#average-percentage').text((summary.average_percentage || 0) + '%');
+
+    // Set average color based on percentage
+    const avgEl = $('#average-percentage');
+    const avg = summary.average_percentage || 0;
+    if (avg >= 70) {
+        avgEl.removeClass('text-warning text-danger').addClass('text-success');
+    } else if (avg >= 50) {
+        avgEl.removeClass('text-success text-danger').addClass('text-warning');
+    } else {
+        avgEl.removeClass('text-success text-warning').addClass('text-danger');
+    }
+
+    // Build results by course
+    const courseContainer = $('#results-by-course');
+    courseContainer.empty();
+
+    if (data.results_by_course) {
+        Object.keys(data.results_by_course).forEach(function(course) {
+            const courseResults = data.results_by_course[course];
+            const courseTotal = courseResults.reduce((sum, r) => sum + (r.total_score || 0), 0);
+            const courseMax = courseResults.reduce((sum, r) => sum + (r.maximum_score || 0), 0);
+            const courseAvg = courseMax > 0 ? Math.round(courseTotal / courseMax * 100) : 0;
+
+            const courseCard = `
+                <div class="card border-0 shadow-sm mb-3">
+                    <div class="card-header bg-light">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h6 class="mb-0">${frappe.utils.escape_html(course)}</h6>
+                            <div>
+                                <span class="badge bg-primary">${courseResults.length} assessments</span>
+                                <span class="badge ${getPercentageBadgeClass(courseAvg)}">${courseAvg}%</span>
+                            </div>
+                        </div>
+                        <div class="progress mt-2">
+                            <div class="progress-bar ${getProgressBarClass(courseAvg)}" role="progressbar"
+                                style="width: ${courseAvg}%" aria-valuenow="${courseAvg}" aria-valuemin="0" aria-valuemax="100">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            courseContainer.append(courseCard);
+        });
+    }
+
+    // Build all results table
+    const tbody = $('#results-table-body');
+    tbody.empty();
+
+    if (data.results && data.results.length > 0) {
+        data.results.forEach(function(result) {
+            const gradeBadge = getGradeBadge(result.grade, result.percentage);
+            const gradeDesc = result.grade_description
+                ? `<br><small class="text-muted">${frappe.utils.escape_html(result.grade_description)}</small>`
+                : '';
+            const row = `
+                <tr>
+                    <td>
+                        <strong>${frappe.utils.escape_html(result.assessment_name || result.assessment_plan || 'N/A')}</strong>
+                        ${result.comment ? `<br><small class="text-muted">${frappe.utils.escape_html(result.comment)}</small>` : ''}
+                    </td>
+                    <td>${frappe.utils.escape_html(result.course || 'N/A')}</td>
+                    <td>${result.schedule_date_formatted || 'N/A'}</td>
+                    <td class="text-end">${result.total_score || 0}</td>
+                    <td class="text-end">${result.maximum_score || 0}</td>
+                    <td class="text-end">
+                        <span class="${getPercentageClass(result.percentage)}">${result.percentage || 0}%</span>
+                    </td>
+                    <td class="text-center">${gradeBadge}${gradeDesc}</td>
+                </tr>
+            `;
+            tbody.append(row);
+        });
+    } else {
+        tbody.append(`
+            <tr>
+                <td colspan="7" class="text-center py-4 text-muted">
+                    No assessment results found.
+                </td>
+            </tr>
+        `);
+    }
+
+    // Show content
+    $('#content-section').removeClass('d-none');
+}
+
+function getGradeBadge(grade, percentage) {
+    if (!grade) return '<span class="badge bg-secondary">N/A</span>';
+
+    let colorClass = 'bg-secondary';
+    if (percentage >= 70) colorClass = 'bg-success';
+    else if (percentage >= 50) colorClass = 'bg-warning text-dark';
+    else colorClass = 'bg-danger';
+
+    return `<span class="badge ${colorClass}">${frappe.utils.escape_html(grade)}</span>`;
+}
+
+function getPercentageClass(percentage) {
+    if (percentage >= 70) return 'text-success fw-bold';
+    if (percentage >= 50) return 'text-warning fw-bold';
+    return 'text-danger fw-bold';
+}
+
+function getPercentageBadgeClass(percentage) {
+    if (percentage >= 70) return 'bg-success';
+    if (percentage >= 50) return 'bg-warning text-dark';
+    return 'bg-danger';
+}
+
+function getProgressBarClass(percentage) {
+    if (percentage >= 70) return 'bg-success';
+    if (percentage >= 50) return 'bg-warning';
+    return 'bg-danger';
+}
+</script>
+{% endblock %}

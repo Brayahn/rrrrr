@@ -1,0 +1,44 @@
+[
+	{
+		"doctype": "Property Setter",
+		"doctype_or_field": "DocType",
+		"doc_type": "Fee Structure",
+		"property": "autoname",
+		"property_type": "Data",
+		"value": "",
+		"module": "Education Custom",
+		"name": "Fee Structure-main-autoname"
+	},
+	{
+		"doctype": "Property Setter",
+		"doctype_or_field": "DocType",
+		"doc_type": "Fee Structure",
+		"property": "naming_rule",
+		"property_type": "Data",
+		"value": "",
+		"module": "Education Custom",
+		"name": "Fee Structure-main-naming_rule"
+	},
+	{
+		"doctype": "Property Setter",
+		"doctype_or_field": "DocField",
+		"doc_type": "Fee Structure",
+		"field_name": "naming_series",
+		"property": "hidden",
+		"property_type": "Check",
+		"value": "1",
+		"module": "Education Custom",
+		"name": "Fee Structure-naming_series-hidden"
+	},
+	{
+		"doctype": "Property Setter",
+		"doctype_or_field": "DocField",
+		"doc_type": "Fee Structure",
+		"field_name": "naming_series",
+		"property": "reqd",
+		"property_type": "Check",
+		"value": "0",
+		"module": "Education Custom",
+		"name": "Fee Structure-naming_series-reqd"
+	}
+]

@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 400">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:0.1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:0.1" />
+    </linearGradient>
+  </defs>
+  <rect fill="url(#bg)" width="500" height="400" rx="10"/>
+
+  <!-- Building -->
+  <rect x="100" y="150" width="300" height="200" fill="#4a5568" rx="5"/>
+  <rect x="120" y="170" width="60" height="80" fill="#667eea" rx="3"/>
+  <rect x="200" y="170" width="60" height="80" fill="#667eea" rx="3"/>
+  <rect x="280" y="170" width="60" height="80" fill="#667eea" rx="3"/>
+  <rect x="120" y="270" width="60" height="80" fill="#667eea" rx="3"/>
+  <rect x="280" y="270" width="60" height="80" fill="#667eea" rx="3"/>
+
+  <!-- Door -->
+  <rect x="200" y="280" width="60" height="70" fill="#2d3748" rx="3"/>
+
+  <!-- Roof/Cap -->
+  <polygon points="250,80 380,150 120,150" fill="#2d3748"/>
+
+  <!-- Graduation cap -->
+  <rect x="220" y="90" width="60" height="8" fill="#1a202c"/>
+  <polygon points="250,70 280,90 220,90" fill="#1a202c"/>
+  <line x1="250" y1="70" x2="250" y2="55" stroke="#1a202c" stroke-width="2"/>
+  <circle cx="250" cy="52" r="5" fill="#667eea"/>
+
+  <!-- Books -->
+  <rect x="50" y="300" width="30" height="40" fill="#e53e3e" rx="2"/>
+  <rect x="55" y="295" width="30" height="40" fill="#38a169" rx="2"/>
+  <rect x="60" y="290" width="30" height="40" fill="#3182ce" rx="2"/>
+
+  <!-- Students -->
+  <circle cx="420" cy="280" r="20" fill="#fbd38d"/>
+  <rect x="400" y="305" width="40" height="50" fill="#667eea" rx="5"/>
+  <circle cx="450" cy="300" r="18" fill="#fbd38d"/>
+  <rect x="432" y="322" width="36" height="45" fill="#e53e3e" rx="5"/>
+</svg>

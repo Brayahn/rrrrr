@@ -1,0 +1,212 @@
+{% extends "templates/web.html" %}
+{% block title %}Assessment Plans{% endblock %}
+
+{% block page_content %}
+<div class="container py-4">
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2>My Assessment Plans</h2>
+            <p class="text-muted">View your upcoming and past assessments</p>
+        </div>
+    </div>
+
+    <!-- Loading State -->
+    <div id="loading" class="text-center py-5">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <p class="mt-2 text-muted">Loading your assessment plans...</p>
+    </div>
+
+    <!-- Error State -->
+    <div id="error-state" class="d-none">
+        <div class="alert alert-warning" role="alert">
+            <h5 class="alert-heading">No Assessment Plans Found</h5>
+            <p id="error-message">No assessment plans found for your account.</p>
+        </div>
+    </div>
+
+    <!-- Content Section -->
+    <div id="content-section" class="d-none">
+        <!-- Upcoming Assessments -->
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="me-2" viewBox="0 0 16 16">
+                        <path d="M4 .5a.5.5 0 0 0-1 0V1H2a2 2 0 0 0-2 2v1h16V3a2 2 0 0 0-2-2h-1V.5a.5.5 0 0 0-1 0V1H4V.5zM16 14V5H0v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2zm-3.5-7h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5z"/>
+                    </svg>
+                    Upcoming Assessments
+                    <span class="badge bg-light text-primary ms-2" id="upcoming-count">0</span>
+                </h5>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Assessment</th>
+                                <th>Course</th>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Room</th>
+                                <th>Examiner</th>
+                                <th class="text-end">Max Score</th>
+                            </tr>
+                        </thead>
+                        <tbody id="upcoming-table-body">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Past Assessments -->
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-secondary text-white">
+                <h5 class="mb-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="me-2" viewBox="0 0 16 16">
+                        <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z"/>
+                        <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z"/>
+                    </svg>
+                    Past Assessments
+                    <span class="badge bg-light text-secondary ms-2" id="past-count">0</span>
+                </h5>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Assessment</th>
+                                <th>Course</th>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Room</th>
+                                <th>Examiner</th>
+                                <th class="text-end">Max Score</th>
+                            </tr>
+                        </thead>
+                        <tbody id="past-table-body">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.card {
+    transition: transform 0.2s ease-in-out;
+}
+.table th {
+    font-weight: 600;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.table td {
+    vertical-align: middle;
+}
+.badge {
+    font-weight: 500;
+}
+</style>
+
+<script>
+frappe.ready(function() {
+    loadAssessmentPlans();
+});
+
+function loadAssessmentPlans() {
+    frappe.call({
+        method: 'education_custom.api.assessments.get_student_assessment_plans',
+        callback: function(r) {
+            $('#loading').addClass('d-none');
+
+            if (r.message && r.message.success) {
+                displayAssessmentPlans(r.message);
+            } else {
+                $('#error-state').removeClass('d-none');
+                if (r.message && r.message.message) {
+                    $('#error-message').text(r.message.message);
+                }
+            }
+        },
+        error: function(err) {
+            $('#loading').addClass('d-none');
+            $('#error-state').removeClass('d-none');
+            $('#error-message').text('An error occurred while loading your assessment plans. Please try again later.');
+        }
+    });
+}
+
+function displayAssessmentPlans(data) {
+    // Update counts
+    $('#upcoming-count').text(data.upcoming ? data.upcoming.length : 0);
+    $('#past-count').text(data.past ? data.past.length : 0);
+
+    // Build upcoming table
+    const upcomingBody = $('#upcoming-table-body');
+    upcomingBody.empty();
+
+    if (data.upcoming && data.upcoming.length > 0) {
+        data.upcoming.forEach(function(plan) {
+            const row = buildPlanRow(plan);
+            upcomingBody.append(row);
+        });
+    } else {
+        upcomingBody.append(`
+            <tr>
+                <td colspan="7" class="text-center py-4 text-muted">
+                    No upcoming assessments scheduled.
+                </td>
+            </tr>
+        `);
+    }
+
+    // Build past table
+    const pastBody = $('#past-table-body');
+    pastBody.empty();
+
+    if (data.past && data.past.length > 0) {
+        data.past.forEach(function(plan) {
+            const row = buildPlanRow(plan);
+            pastBody.append(row);
+        });
+    } else {
+        pastBody.append(`
+            <tr>
+                <td colspan="7" class="text-center py-4 text-muted">
+                    No past assessments found.
+                </td>
+            </tr>
+        `);
+    }
+
+    // Show content
+    $('#content-section').removeClass('d-none');
+}
+
+function buildPlanRow(plan) {
+    const timeRange = plan.from_time_formatted && plan.to_time_formatted
+        ? `${plan.from_time_formatted} - ${plan.to_time_formatted}`
+        : (plan.from_time_formatted || 'N/A');
+
+    return `
+        <tr>
+            <td>
+                <strong>${frappe.utils.escape_html(plan.assessment_name || plan.name)}</strong>
+            </td>
+            <td>${frappe.utils.escape_html(plan.course || 'N/A')}</td>
+            <td>${plan.schedule_date_formatted || 'N/A'}</td>
+            <td>${timeRange}</td>
+            <td>${frappe.utils.escape_html(plan.room || 'N/A')}</td>
+            <td>${frappe.utils.escape_html(plan.examiner_name || 'N/A')}</td>
+            <td class="text-end">${plan.maximum_assessment_score || 'N/A'}</td>
+        </tr>
+    `;
+}
+</script>
+{% endblock %}
