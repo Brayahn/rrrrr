@@ -1,0 +1,122 @@
+[
+  {
+    "item_code": "GLOBAL-PEN-001",
+    "item_name": "Ballpoint Pen",
+    "item_group": "Stationery",
+    "stock_uom": "Nos",
+    "standard_rate": 20.0,
+    "description": "Standard ballpoint pen - blue ink",
+    "is_stock_item": true,
+    "is_sales_item": true,
+    "is_purchase_item": false,
+    "brand": "Generic"
+  },
+  {
+    "item_code": "GLOBAL-NOTEBOOK-001",
+    "item_name": "Notebook A4",
+    "item_group": "Stationery",
+    "stock_uom": "Nos",
+    "standard_rate": 150.0,
+    "description": "A4 size notebook with ruled pages",
+    "is_stock_item": true,
+    "is_sales_item": true,
+    "is_purchase_item": false,
+    "brand": "Generic"
+  },
+  {
+    "item_code": "GLOBAL-FOLDER-001",
+    "item_name": "File Folder",
+    "item_group": "Stationery",
+    "stock_uom": "Nos",
+    "standard_rate": 50.0,
+    "description": "Standard file folder for documents",
+    "is_stock_item": true,
+    "is_sales_item": true,
+    "is_purchase_item": false,
+    "brand": "Generic"
+  },
+  {
+    "item_code": "GLOBAL-BAG-001",
+    "item_name": "Shopping Bag",
+    "item_group": "Packaging",
+    "stock_uom": "Nos",
+    "standard_rate": 5.0,
+    "description": "Plastic shopping bag",
+    "is_stock_item": true,
+    "is_sales_item": true,
+    "is_purchase_item": false,
+    "brand": "Generic"
+  },
+  {
+    "item_code": "GLOBAL-RECEIPT-001",
+    "item_name": "Thermal Receipt Paper",
+    "item_group": "Consumables",
+    "stock_uom": "Roll",
+    "standard_rate": 200.0,
+    "description": "Thermal receipt paper roll 80mm x 50mm",
+    "is_stock_item": true,
+    "is_sales_item": true,
+    "is_purchase_item": false,
+    "brand": "Generic"
+  },
+  {
+    "item_code": "GLOBAL-TAPE-001",
+    "item_name": "Packaging Tape",
+    "item_group": "Packaging",
+    "stock_uom": "Roll",
+    "standard_rate": 300.0,
+    "description": "Clear packaging tape",
+    "is_stock_item": true,
+    "is_sales_item": true,
+    "is_purchase_item": false,
+    "brand": "Generic"
+  },
+  {
+    "item_code": "GLOBAL-BOX-001",
+    "item_name": "Cardboard Box Small",
+    "item_group": "Packaging",
+    "stock_uom": "Nos",
+    "standard_rate": 25.0,
+    "description": "Small cardboard box for packaging",
+    "is_stock_item": true,
+    "is_sales_item": true,
+    "is_purchase_item": false,
+    "brand": "Generic"
+  },
+  {
+    "item_code": "GLOBAL-BOTTLE-001",
+    "item_name": "Water Bottle 500ml",
+    "item_group": "Beverages",
+    "stock_uom": "Nos",
+    "standard_rate": 50.0,
+    "description": "Bottled water 500ml",
+    "is_stock_item": true,
+    "is_sales_item": true,
+    "is_purchase_item": false,
+    "brand": "Generic"
+  },
+  {
+    "item_code": "GLOBAL-CANDY-001",
+    "item_name": "Candy Pack",
+    "item_group": "Food Items",
+    "stock_uom": "Nos",
+    "standard_rate": 30.0,
+    "description": "Assorted candy pack",
+    "is_stock_item": true,
+    "is_sales_item": true,
+    "is_purchase_item": false,
+    "brand": "Generic"
+  },
+  {
+    "item_code": "GLOBAL-CHARGE-001",
+    "item_name": "Service Charge",
+    "item_group": "Services",
+    "stock_uom": "Nos",
+    "standard_rate": 0.0,
+    "description": "General service charge",
+    "is_stock_item": false,
+    "is_sales_item": true,
+    "is_purchase_item": false
+  }
+]
+
