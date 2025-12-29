@@ -147,6 +147,7 @@ fixtures = [
     {"dt": "Student Batch Name"},
     {"dt": "Room"},
     {"dt": "Course Scheduling Tool"},
+    {"dt": "Examining Body"},
 
     # =============================================
     # LMS CONFIGURATION (Non-Transactional)
