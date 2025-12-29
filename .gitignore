@@ -3,5 +3,6 @@
 *.egg-info
 *.swp
 tags
-node_modules
-__pycache__
+education/docs/current
+dist/
+__pycache__/
